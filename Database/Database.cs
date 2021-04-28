@@ -2,17 +2,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 namespace Database
 {
     public class DataBase
     {
-        public DataBase(string[] args)
+        public DataBase()
         {
             
         }
+        
         private const int MAX_SIZE = 255;
         private int size = 0;
         private List<Table> contents = new List<Table>();
+        public void addTable(string[] args)
+        {
+            try
+            {
+                contents.Add(new Table(args));
+                Console.WriteLine("Table Succesfully Created");
+            }
+            catch
+            {
+                Console.WriteLine("Table Creation Returned an Error");
+            }
+        }
+        public Table getTable(string name)
+        {
+            for(int counter = 0; counter < contents.Count(); counter++)
+            {
+                if(this.contents[counter].getName() == name)
+                {
+                    return this.contents[counter];
+                }
+            }
+            return null;
+        }
+        public Table getTable(int index)
+        {
+            return this.contents[index];
+        }
+
     }
 
     public class Table
@@ -23,12 +53,13 @@ namespace Database
         }
         private bool isProtected = false;
         private int size = 0;
+        private string name = "";
         private List<Column> rows = new List<Column>();
         public void sortTable()
         {
             for(int i = 0; i < rows.Count(); i++)
             {
-                if (rows[i].getKey())
+                if (this.rows[i].getKey())
                 {
                     for (int j = 1; i < this.rows[i].getContents()[j]; j++)
                     {
@@ -41,13 +72,17 @@ namespace Database
                                 dynamic temp = tempData[l];
                                 tempData[l] = tempData[l - 1];
                                 tempData[l - 1] = temp;
-
+                                this.rows[y].setContents(tempData);
                             }
                         }
                     }
                     break;
                 }
             }
+        }
+        public string getName()
+        {
+            return this.name;
         }
     }
 
