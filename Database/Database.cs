@@ -9,12 +9,15 @@ namespace Database
     {
         public DataBase()
         {
-            
+            string[] args = new string[] { "index" };
+            this.addTable(args);
+            Console.WriteLine("Database Successfully Created");
         }
         
         private const int MAX_SIZE = 255;
         private int size = 0;
         private List<Table> contents = new List<Table>();
+        private int tableIndex = 0;
         public void addTable(string[] args)
         {
             try
@@ -42,6 +45,28 @@ namespace Database
         {
             return this.contents[index];
         }
+        public void setFocusTable(int index)
+        {
+            this.tableIndex = index;
+            Console.WriteLine($"Table {this.contents[counter].getName()} is Selected");
+        }
+        public void setFocusTable(string name)
+        {
+            for (int counter = 0; counter < contents.Count(); counter++)
+            {
+                if (this.contents[counter].getName() == name)
+                {
+                    this.tableIndex = counter;
+                    Console.WriteLine($"Table {this.contents[counter].getName()} is Selected");
+                }
+            }
+            
+        }
+        public void addEntity(dynamic[] data)
+        {
+            contents[tableIndex].addRow(data);
+            Console.WriteLine("Row Succesfully Added");
+        }
 
     }
 
@@ -49,7 +74,7 @@ namespace Database
     {
         public Table(string[] args)
         {
-
+            this.name = args[0];
         }
         private bool isProtected = false;
         private int size = 0;
@@ -80,6 +105,19 @@ namespace Database
                 }
             }
         }
+        public void createColumn(string[] args)
+        {
+            this.rows.Add(new Column(args));
+        }
+        public void addRow(dynamic[] data)
+        {
+            for(int i = 0; i < data.Length; i++)
+            {
+                this.rows[i].addData(data[i]);
+            }
+            Console.WriteLine("Row succesfully added");
+            this.size++;
+        }
         public string getName()
         {
             return this.name;
@@ -90,10 +128,11 @@ namespace Database
     {
         private bool autoInc = false;
         private bool key = false;
+/*       private int keyReference;*/
         private string name = "";
         private dynamic data;
-         public Column(string[] args)
-         {
+        public Column(string[] args)
+        {
             switch (args[0])
             {
                 case "int":
@@ -124,17 +163,26 @@ namespace Database
             this.name = args[1];
 
             if (bool.TryParse(args[2], out autoInc))
-            { 
-                
+            {
+
             }
             if (bool.TryParse(args[3], out key))
             {
 
             }
+            Console.WriteLine("Column Successfully Created");
+        }
+        public void addData(dynamic data)
+        {
+            this.data.Add(data);
         }
         public bool getAI()
         {
             return this.autoInc;
+        }
+        public string getName()
+        {
+            return this.name;
         }
         public bool getKey()
         {
