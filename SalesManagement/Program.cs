@@ -29,6 +29,7 @@ namespace SalesManagement
             db.printTable();
             db.deleteRow(4);
             db.printTable();
+            db.printTable(new string[] { "Age", "Name" });
             db.truncateTable();
         }
     }
