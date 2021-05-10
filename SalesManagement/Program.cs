@@ -15,13 +15,15 @@ namespace SalesManagement
             db.setFocusTable(1);
             string[] argsToAdd = new string[] { "int", "ID", "true", "true" };
             db.createColumn(argsToAdd);
-            argsToAdd = new string[]{ "string", "Age", "false", "false"  };
+            argsToAdd = new string[]{ "int", "Age", "false", "false"  };
             db.createColumn(argsToAdd);
-            dynamic[] dataToAdd = new string[] { "", "20" };
+            argsToAdd = new string[] { "string", "Name", "false", "false" };
+            db.createColumn(argsToAdd);
+            dynamic[] dataToAdd = new dynamic[] { "", 20, "Andrew"};
             db.addEntity(dataToAdd);
             for(int i = 0; i < 10; i++)
             {
-                dataToAdd = new string[] { "", Convert.ToString(rnd.Next(100))};
+                dataToAdd = new dynamic[] { "", rnd.Next(100), "Not Andrew"};
                 db.addEntity(dataToAdd);
             }
             db.printTable();
