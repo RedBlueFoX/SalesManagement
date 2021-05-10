@@ -27,6 +27,9 @@ namespace SalesManagement
                 db.addEntity(dataToAdd);
             }
             db.printTable();
+            db.deleteRow(4);
+            db.printTable();
+            db.truncateTable();
         }
     }
 }   

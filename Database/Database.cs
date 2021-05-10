@@ -76,6 +76,15 @@ namespace Database
         {
             this.contents[tableIndex].printTable(false);
         }
+        public void deleteRow(int index)
+        {
+            this.contents[tableIndex].deleteRow(index);
+        }
+        
+        public void truncateTable()
+        {
+            this.contents[tableIndex].truncateTable();
+        }
     }
 
     public class Table
@@ -140,7 +149,7 @@ namespace Database
                 {
                     cell = this.rows[i].getName().ToCharArray();
                     int letterCounter = 0;
-                    while (letterCounter < 10)
+                    while (letterCounter < 30)
                     {
                         if (letterCounter < cell.Length)
                         {
@@ -237,7 +246,7 @@ namespace Database
                                         break;*/
                             }
                             int letterCounter = 0;
-                            while (letterCounter < 10)
+                            while (letterCounter < 30)
                             {
                                 if (letterCounter < cell.Length)
                                 {
@@ -255,103 +264,22 @@ namespace Database
                         Console.Write("\n");
                     }
                 
-                /*for (int i = 0; i < this.rows[i].getContents().Count; i++)
-                {
-                    for (int j = 0; j < this.rows.Count; j++)
-                    {
-                        switch (this.rows[j].getDataType())
-                        {
-                            case "int":
-                                if ((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1 <= 30)
-                                {
-                                    cell = Convert.ToString((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1).ToCharArray();
-                                }
-                                else
-                                {
-                                    cell = Convert.ToString((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1).Substring(0, 30).ToCharArray();
-                                }
-                                break;
-                            case "float":
-                                cell = this.rows[j].getContents()[i].ToCharArray();
-                                break;
-                            case "double":
-                                cell = this.rows[j].getContents()[i].ToCharArray();
-                                break;
-                            case "char":
-                                cell = this.rows[j].getContents()[i].ToCharArray();
-                                break;
-                            case "string":
-                                if (this.rows[j].getContents()[i].Length > 30)
-                                {
-                                    cell = this.rows[j].getContents()[i].Substring(0, 30).ToCharArray();
-                                }
-                                else
-                                {
-                                    cell = this.rows[j].getContents()[i].ToCharArray();
-                                }
-                                break;
-                            case "date":
-                                cell = Convert.ToString(this.rows[j].getContents()[i]).ToCharArray( );
-                                break;
-                            case "bool":
-                                cell = Convert.ToString(this.rows[j].getContents()[i]).ToCharArray( );
-                                break;
-                            default:
-                                cell = Convert.ToString(this.rows[j].getContents()[i]).ToCharArray( );
-                                break;
-                                *//*case "int":
-                                    if ((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1 <= 30)
-                                    {
-                                        Console.Write(Convert.ToString((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1));
-                                    } else
-                                    {
-                                        Console.Write(Convert.ToString((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1).Substring(0, 30));
-                                    }
-                                    break;
-                                case "float":
-                                    Console.Write(this.rows[j].getContents()[i].ToString32());
-                                    break;
-                                case "double":
-                                    Console.Write(this.rows[j].getContents()[i].ToString32());
-                                    break;
-                                case "char":
-                                    Console.Write(this.rows[j].getContents()[i]);
-                                    break;
-                                case "string":
-                                    if (this.rows[j].getContents()[i].Length > 30)
-                                    {
-                                        Console.Write(this.rows[j].getContents()[i].Substring(0, 30));
-                                    } else
-                                    {
-                                        Console.Write(this.rows[j].getContents()[i]);
-                                    }
-                                    break;
-                                case "date":
-                                    Console.Write(Convert.ToString(this.rows[j].getContents()[i]));
-                                    break;
-                                case "bool":
-                                    Console.Write(Convert.ToString(this.rows[j].getContents()[i]));
-                                    break;
-                                default:
-                                    Console.Write(Convert.ToString(this.rows[j].getContents()[i]));
-                                    break;*//*
-                        }
-                        int letterCounter = 0;
-                        while(letterCounter < 10)
-                        {
-                            if(letterCounter < cell.Length)
-                            {
-                                Console.Write(cell[letterCounter]);
-                            } else
-                            {
-                                Console.Write(" ");
-                            }
-                            letterCounter++;
-                        }
-                        
-                        Console.Write("|");
-                    }
-                }*/
+                
+            }
+        }
+        public void deleteRow(int index)
+        {
+            for (int i = 0; i < this.rows.Count; i++)
+            {
+                this.rows[i].deleteData(index);
+            }
+
+        }
+        public void truncateTable()
+        {
+            foreach (Column cl in this.rows)
+            {
+                cl.truncateColumn();
             }
         }
         public string getName()
@@ -457,6 +385,15 @@ namespace Database
         {
             this.data = input;
 
+        }
+        public void deleteData(int index)
+        {
+            this.data.RemoveAt(index);
+            this.size--;
+        }
+        public void truncateColumn()
+        {
+            this.data.RemoveRange(0, this.data.Count);
         }
 
         /*public void sortData()
