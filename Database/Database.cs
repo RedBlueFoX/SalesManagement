@@ -42,10 +42,10 @@ namespace Database
             }
             return null;
         }
-        /*public Table getTable(int index)
-        {   
+        public Table getTable(int index)
+        {
             return this.contents[index];
-        }*/
+        }
         public void setFocusTable(int index)
         {
             this.tableIndex = index;
@@ -71,6 +71,14 @@ namespace Database
         {
             contents[tableIndex].addRow(data);
             Console.WriteLine("Row Succesfully Added");
+        }
+        public void modifyData(dynamic[] data, int index)
+        {
+            this.contents[tableIndex].modifyData(data, index);
+        }
+        public void modifyData(IDictionary<string, dynamic> data, int index)
+        {
+            this.contents[tableIndex].modifyData(data, index);
         }
         public void printTable()
         {
@@ -107,7 +115,7 @@ namespace Database
             {
                 if (this.rows[i].getKey())
                 {
-                    for (int j = 1; i < this.rows[i].getContents()[j]; j++)
+                    for (int j = 1; j < this.rows[i].getContents()[j]; j++)
                     {
                         for (int l = j; l > 0 && this.rows[i].getContents()[l - 1] > this.rows[i].getContents()[l]; l--)
                         {
@@ -118,13 +126,17 @@ namespace Database
                                 dynamic temp = tempData[l];
                                 tempData[l] = tempData[l - 1];
                                 tempData[l - 1] = temp;
-                                this.rows[y].setContents(tempData);
+                                this.rows[y].setContents(tempData, j);
                             }
                         }
                     }
                     break;
                 }
             }
+        }
+        public void sortTableByColumn(int columnNumber)
+        {
+            
         }
         public void createColumn(string[] args)
         {
@@ -168,7 +180,7 @@ namespace Database
                     Console.Write("|");
                 }
                 Console.Write("\n");
-                for (int j = 0; j < this.rows[0].getSize(); j++)
+                for (int j = 0; j < this.size; j++)
                 {
                     for (int k = 0; k < this.rows.Count; k++)
                     {
@@ -212,42 +224,7 @@ namespace Database
                             default:
                                 cell = Convert.ToString(this.rows[k].getContents()[j]).ToCharArray();
                                 break;
-                                /*case "int":
-                                    if ((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1 <= 30)
-                                    {
-                                        Console.Write(Convert.ToString((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1));
-                                    } else
-                                    {
-                                        Console.Write(Convert.ToString((int)Math.Floor(Math.Log10(this.rows[j].getContents()[i])) + 1).Substring(0, 30));
-                                    }
-                                    break;
-                                case "float":
-                                    Console.Write(this.rows[j].getContents()[i].ToString32());
-                                    break;
-                                case "double":
-                                    Console.Write(this.rows[j].getContents()[i].ToString32());
-                                    break;
-                                case "char":
-                                    Console.Write(this.rows[j].getContents()[i]);
-                                    break;
-                                case "string":
-                                    if (this.rows[j].getContents()[i].Length > 30)
-                                    {
-                                        Console.Write(this.rows[j].getContents()[i].Substring(0, 30));
-                                    } else
-                                    {
-                                        Console.Write(this.rows[j].getContents()[i]);
-                                    }
-                                    break;
-                                case "date":
-                                    Console.Write(Convert.ToString(this.rows[j].getContents()[i]));
-                                    break;
-                                case "bool":
-                                    Console.Write(Convert.ToString(this.rows[j].getContents()[i]));
-                                    break;
-                                default:
-                                    Console.Write(Convert.ToString(this.rows[j].getContents()[i]));
-                                    break;*/
+                                
                         }
                         int letterCounter = 0;
                         while (letterCounter < 30)
@@ -289,7 +266,7 @@ namespace Database
 
                     if (columnName != this.rows[i].getName())
                     {
-                        bool test = columnName != this.rows[i].getName();
+                        bool ifEqualToPrompt = columnName != this.rows[i].getName();
                         continue;
                     }
 
@@ -311,7 +288,7 @@ namespace Database
                 }
             }
             Console.Write("\n");
-            for (int j = 0; j < this.rows[0].getSize(); j++)
+            for (int j = 0; j < this.size; j++)
             {
                 foreach (string columnName in columns)
                 {
@@ -384,18 +361,38 @@ namespace Database
                 }
                 Console.Write("\n");
                 
-        }
+            }
         
-    }
+        }
         public void deleteRow(int index)
         {
             for (int i = 0; i < this.rows.Count; i++)
             {
                 this.rows[i].deleteData(index);
             }
-
+            this.size--;
         }
 
+        public void modifyData(dynamic[] data, int index)
+        {
+            for(int i = 0; i < data.Length; i++)
+            {
+                this.rows[i + 1].setContents(data[i], index);
+            }
+        }
+        public void modifyData(IDictionary<string, dynamic> data, int index)
+        {
+            for(int i = 0; i < this.rows.Count(); i++)
+            {
+                foreach(KeyValuePair<string, dynamic> kvp in data)
+                {
+                    if(this.rows[i].getName() == kvp.Key)
+                    {
+                        this.rows[i].setContents(kvp.Value, index);
+                    }
+                } 
+            }
+        }
 
         public void truncateTable()
         {
@@ -403,6 +400,7 @@ namespace Database
             {
                 cl.truncateColumn();
             }
+            this.size = 0;
         }
         public string getName()
         {
@@ -503,9 +501,13 @@ namespace Database
         {
             return this.data;
         }
-        public void setContents(dynamic input)
+        public dynamic getContents(int index)
         {
-            this.data = input;
+            return this.data[index];
+        }
+        public void setContents(dynamic input, int index)
+        {
+            this.data[index] = input;
 
         }
         public void deleteData(int index)
@@ -516,6 +518,7 @@ namespace Database
         public void truncateColumn()
         {
             this.data.RemoveRange(0, this.data.Count);
+            this.size = 0;
         }
 
         /*public void sortData()

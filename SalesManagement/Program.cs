@@ -1,6 +1,7 @@
 ﻿using System;
 using Database;
-
+using InputParser;
+using System.Collections.Generic;
 namespace SalesManagement
 {
     class Program
@@ -29,8 +30,15 @@ namespace SalesManagement
             db.printTable();
             db.deleteRow(4);
             db.printTable();
-            db.printTable(new string[] { "Age", "Name" });
+            dynamic[] modifiedData = new dynamic[] { 20, "Mark" };
+            db.modifyData(modifiedData, 7);
+            IDictionary<string, dynamic> modifiedData2 = new Dictionary<string, dynamic>();
+            modifiedData2.Add("Age", 12);
+            modifiedData2.Add("Name", "Josh");
+            db.modifyData(modifiedData2, 6);
+            db.printTable(new string[] { "ID", "Name" });
             db.truncateTable();
+            db.printTable();
         }
     }
 }   
