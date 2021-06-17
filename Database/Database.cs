@@ -153,7 +153,7 @@ namespace Database
         }
         public void printTable(bool printAll)
         {
-
+            Console.WriteLine("\n");
             if (!printAll)
             {
                 char[] cell = new char[30];
@@ -254,6 +254,7 @@ namespace Database
         }
         public void printTable(bool printAll, string[] columns)
         {
+            Console.WriteLine("\n");
             char[] cell = new char[30];
             for (int i = 0; i < cell.Length; i++)
             {
@@ -371,6 +372,7 @@ namespace Database
                 this.rows[i].deleteData(index);
             }
             this.size--;
+            Console.WriteLine($"Row {index} was succesfully deleted");
         }
 
         public void modifyData(dynamic[] data, int index)
@@ -379,6 +381,7 @@ namespace Database
             {
                 this.rows[i + 1].setContents(data[i], index);
             }
+            Console.WriteLine($"Changes to the row {index} were succesful");
         }
         public void modifyData(IDictionary<string, dynamic> data, int index)
         {
@@ -392,6 +395,7 @@ namespace Database
                     }
                 } 
             }
+            Console.WriteLine($"Changes to the row {index} were succesful");
         }
 
         public void truncateTable()
@@ -401,6 +405,7 @@ namespace Database
                 cl.truncateColumn();
             }
             this.size = 0;
+            Console.WriteLine("Table was succesfully truncated");
         }
         public string getName()
         {
